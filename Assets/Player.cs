@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
     void RotateView()
     {
         Vector2 mouseVector = inputSystemActions.Player.Look.ReadValue<Vector2>();
+        
     }
 
 
