@@ -153,7 +153,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DistanceTillGround: 1
-  moveSpeed: 5
+  cameraSensitivityX: 10
+  cameraSensitivityY: 10
+  invertYCamera: 1
+  invertXCamera: 0
+  moveSpeed: 10
   playerCamera: {fileID: 1627045705}
 --- !u!136 &905071328
 CapsuleCollider:
@@ -243,7 +247,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1627045706}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &905071332
@@ -359,13 +364,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1627045703}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.20571814, y: -0, z: -0, w: 0.9786113}
-  m_LocalPosition: {x: 0, y: 7.47, z: -10}
+  m_LocalRotation: {x: -0.5008036, y: -0, z: -0, w: 0.865561}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 23.743, y: 0, z: 0}
+  m_Father: {fileID: 905071331}
+  m_LocalEulerAnglesHint: {x: -60.106, y: 0, z: 0}
 --- !u!114 &1627045707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -643,7 +648,6 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1627045706}
   - {fileID: 1840963455}
   - {fileID: 2138036548}
   - {fileID: 905071331}

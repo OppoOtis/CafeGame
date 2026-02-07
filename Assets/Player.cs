@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 
     bool grounded;
 
+    public float cameraSensitivityX, cameraSensitivityY;
+    public bool invertYCamera, invertXCamera;
     public float moveSpeed;
     Rigidbody rb;
 
@@ -22,10 +24,13 @@ public class Player : MonoBehaviour
         inputManager = new InputManager(new InputAction[] {
                                             inputSystemActions.Player.Move,
                                             inputSystemActions.Player.Jump,
-                                            inputSystemActions.Player.Interact
+                                            inputSystemActions.Player.Interact,
+                                            inputSystemActions.Player.Look
                                             });
 
         rb = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -34,6 +39,7 @@ public class Player : MonoBehaviour
         grounded = CheckIfGrounded();
 
         MoveInDirection();
+        RotateView();
     }
 
     void MoveInDirection()
@@ -46,7 +52,12 @@ public class Player : MonoBehaviour
     void RotateView()
     {
         Vector2 mouseVector = inputSystemActions.Player.Look.ReadValue<Vector2>();
-        
+        Debug.Log(mouseVector);
+        float yRotation = playerCamera.transform.localRotation.eulerAngles.y + (mouseVector.x * cameraSensitivityX * Time.deltaTime * (invertXCamera ? -1 : 1));
+        float xRotation = playerCamera.transform.localRotation.eulerAngles.x + (mouseVector.y * cameraSensitivityY * Time.deltaTime * (invertYCamera ? -1 : 1));
+        //xRotation = Mathf.Clamp(xRotation, -60, 60);
+
+        playerCamera.transform.localRotation = Quaternion.Euler(xRotation,yRotation, playerCamera.transform.localRotation.eulerAngles.z);
     }
 
 
