@@ -30,8 +30,6 @@ public class PlayerMovement : MonoBehaviour
     [AllowNesting]
     public Vector3[] allContactNormals;
 
-
-
     public float cameraSensitivityX, cameraSensitivityY;
     public bool invertYCamera, invertXCamera;
     public float moveSpeed, jumpPower;
@@ -47,13 +45,18 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         inputSystemActions = new InputSystem_Actions();
+        Blackboard.inputSystemActions = inputSystemActions;
         inputManager = new InputManager(new InputAction[] {
                                             inputSystemActions.Player.Move,
                                             inputSystemActions.Player.Jump,
                                             inputSystemActions.Player.Interact,
-                                            inputSystemActions.Player.Look
+                                            inputSystemActions.Player.Look,
+                                            inputSystemActions.Player.Attack,
+                                            inputSystemActions.Player.Cancel
                                             });
+        Blackboard.inputManager = inputManager;
         inputManager.AddActionToInput(inputSystemActions.Player.Jump, Jump);
+
 
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -77,13 +80,13 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 moveDirV2 = inputSystemActions.Player.Move.ReadValue<Vector2>();
         Vector3 moveDir = new Vector3(playerCamera.transform.forward.x, 0, playerCamera.transform.forward.z).normalized * moveDirV2.y + new Vector3(playerCamera.transform.right.x, 0, playerCamera.transform.right.z).normalized * moveDirV2.x;
-        rb.MovePosition(rb.position + (moveDir * moveSpeed * Time.deltaTime));
+        Vector3 newVelocity = moveDir * moveSpeed;
+        rb.linearVelocity = new Vector3(newVelocity.x, rb.linearVelocity.y, newVelocity.z);
     }
 
     void RotateView()
     {
         Vector2 mouseVector = inputSystemActions.Player.Look.ReadValue<Vector2>();
-        Debug.Log(mouseVector);
         float yRotation = playerCamera.transform.localRotation.eulerAngles.y + (mouseVector.x * cameraSensitivityX * Time.deltaTime * (invertXCamera ? -1 : 1));
         float xRotation = playerCamera.transform.localRotation.eulerAngles.x + (mouseVector.y * cameraSensitivityY * Time.deltaTime * (invertYCamera ? -1 : 1));
 
