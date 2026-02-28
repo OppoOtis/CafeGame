@@ -21,31 +21,20 @@ public class PlayerCharacterController : MonoBehaviour
     bool readyToJump;
     Vector3 velocity;
 
-    InputSystem_Actions inputSystemActions;
-    InputManager inputManager;
+
 
     //for now the player camera is the main camera
     public Camera playerCamera;
 
     void Awake()
     {
-        inputSystemActions = new InputSystem_Actions();
-        Blackboard.inputSystemActions = inputSystemActions;
-        inputManager = new InputManager(new InputAction[] {
-                                            inputSystemActions.Player.Move,
-                                            inputSystemActions.Player.Jump,
-                                            inputSystemActions.Player.Interact,
-                                            inputSystemActions.Player.Look,
-                                            inputSystemActions.Player.Attack,
-                                            inputSystemActions.Player.Cancel
-                                            });
-        Blackboard.inputManager = inputManager;
-        inputManager.AddActionToInput(inputSystemActions.Player.Jump, Jump);
-
         characterController = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+    }
+
+    private void Start()
+    {
+        Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.Jump, Jump);
     }
 
 
@@ -54,7 +43,7 @@ public class PlayerCharacterController : MonoBehaviour
     {
         CheckGrounded();
         if (grounded)
-            velocity = Vector3.zero;
+            velocity.y = 0;
         MoveInDirection();
         RotateView();
 
@@ -71,15 +60,16 @@ public class PlayerCharacterController : MonoBehaviour
 
     void MoveInDirection()
     {
-        Vector2 moveDirV2 = inputSystemActions.Player.Move.ReadValue<Vector2>();
+        Vector2 moveDirV2 = Blackboard.inputSystemActions.Player.Move.ReadValue<Vector2>();
         Vector3 moveDir = new Vector3(playerCamera.transform.forward.x, 0, playerCamera.transform.forward.z).normalized * moveDirV2.y + new Vector3(playerCamera.transform.right.x, 0, playerCamera.transform.right.z).normalized * moveDirV2.x;
         Vector3 newVelocity = moveDir * moveSpeed;
-        velocity += newVelocity;
+        velocity.x = newVelocity.x;
+        velocity.z = newVelocity.z;
     }
 
     void RotateView()
     {
-        Vector2 mouseVector = inputSystemActions.Player.Look.ReadValue<Vector2>();
+        Vector2 mouseVector = Blackboard.inputSystemActions.Player.Look.ReadValue<Vector2>();
         float yRotation = playerCamera.transform.localRotation.eulerAngles.y + (mouseVector.x * cameraSensitivityX * Time.deltaTime * (invertXCamera ? -1 : 1));
         float xRotation = playerCamera.transform.localRotation.eulerAngles.x + (mouseVector.y * cameraSensitivityY * Time.deltaTime * (invertYCamera ? -1 : 1));
 
@@ -106,15 +96,6 @@ public class PlayerCharacterController : MonoBehaviour
         readyToJump = true;
     }
 
-    private void OnEnable()
-    {
-        inputManager.WhenEnabled();
-    }
-
-    private void OnDisable()
-    {
-        inputManager.WhenDisabled();
-    }
 
     void CheckGrounded()
     {

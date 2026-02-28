@@ -12,21 +12,31 @@ public class PlayerInteraction : MonoBehaviour
 
     BoxCollider boxCollider;
     public CharacterController playerCharacterController;
+    public Camera playerCamera;
+
+    public float throwPower;
 
     private void Awake()
     {
         boxCollider = GetComponent<BoxCollider>();
+
     }
+
+    private void Start()
+    {
+        Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.Interact, InteractWith);
+        Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.Drop, DropGrabbable);
+        Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.Throw, ThrowGrabbable);
+    }
+
     private void Update()
     {
         CheckForInteractibles();
 
-        Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.Attack, GrabInteractible);
-        Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.Cancel, DropGrabbable);
-
         if(currentlyHolding != null)
         {
             currentlyHolding.Visual.transform.position = holdingLocation.position;
+            currentlyHolding.Visual.transform.forward = transform.forward; 
         }
     }
 
@@ -50,23 +60,52 @@ public class PlayerInteraction : MonoBehaviour
             closestInteractible.HighLight();
     }
 
+    void InteractWith(InputAction.CallbackContext context)
+    {
+        if (closestInteractible == null)
+            return;
+        if (closestInteractible.Visual.GetComponent<IGrabbable>() != null)
+        {
+            GrabInteractible(context);
+            return;
+        }
+
+        closestInteractible.Interact();
+    }
+
     void GrabInteractible(InputAction.CallbackContext context)
     {
-        if (closestInteractible == null || closestInteractible.Visual.GetComponent<IGrabbable>() == null)
+        if (closestInteractible == null || closestInteractible.Visual.GetComponent<IGrabbable>() == null || currentlyHolding != null)
             return;
-
         currentlyHolding = closestInteractible.Visual.GetComponent<IGrabbable>();
+        currentlyHolding.CanInteract = false;
         currentlyHolding.rb.isKinematic = true;
         currentlyHolding.rb.linearVelocity = Vector3.zero;
+        currentlyHolding.Visual.gameObject.layer = 8;
+        closestInteractible = null;
     }
 
     void DropGrabbable(InputAction.CallbackContext context)
     {
+        Debug.Log("Drop");
         if (currentlyHolding == null)
             return;
         currentlyHolding.rb.isKinematic = false;
-        Debug.Log(playerCharacterController.velocity);
+        currentlyHolding.CanInteract = true;
         currentlyHolding.rb.linearVelocity = playerCharacterController.velocity;
+        currentlyHolding.Visual.gameObject.layer = 0;
+        currentlyHolding = null;
+    }
+
+    void ThrowGrabbable(InputAction.CallbackContext context)
+    {
+        Debug.Log("Throw");
+        if (currentlyHolding == null)
+            return;
+        currentlyHolding.rb.isKinematic = false;
+        currentlyHolding.CanInteract = true;
+        currentlyHolding.rb.linearVelocity = playerCamera.transform.forward * throwPower;
+        currentlyHolding.Visual.gameObject.layer = 0;
         currentlyHolding = null;
     }
 }

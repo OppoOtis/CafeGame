@@ -1,13 +1,13 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class Interactible : MonoBehaviour, IGrabbable
+public class Interactible : MonoBehaviour, IInteractible
 {
     public Transform Visual { get; set; }
     public Rigidbody rb { get; set; }
-    public Collider col { get; set; }
 
-    public bool CanInteract = true;
+    public bool CanInteract { get { return canInteract; } set { canInteract = value; } }
+    public bool canInteract = true;
     public bool IsVisible { get { return myRenderer.isVisible; } }
 
     Renderer myRenderer;
@@ -17,12 +17,11 @@ public class Interactible : MonoBehaviour, IGrabbable
         myRenderer = GetComponent<Renderer>();
         Visual = transform;
         rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
     }
 
     public virtual void Interact()
     {
-
+        //I want some things to trigger a minigame, and change the camera view maybe?
     }
 
     public void DeHighLight()
