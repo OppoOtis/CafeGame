@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 
 public enum playerState
 {
-    normal,
-    minigame
+    freeControl,
+    noControl
 }
 
 public class PlayerManager : MonoBehaviour
@@ -24,17 +24,21 @@ public class PlayerManager : MonoBehaviour
         inputManager = new InputManager(new InputAction[] {
                                             inputSystemActions.Player.Move,
                                             inputSystemActions.Player.Jump,
-                                            inputSystemActions.Player.Interact,
+                                            inputSystemActions.Player.InteractLeft,
+                                            inputSystemActions.Player.InteractRight,
                                             inputSystemActions.Player.Look,
-                                            inputSystemActions.Player.Use,
-                                            inputSystemActions.Player.SecondUse,
+                                            inputSystemActions.Player.LeftUse,
+                                            inputSystemActions.Player.LeftUseHold,
+                                            inputSystemActions.Player.RightUse,
+                                            inputSystemActions.Player.RightUseHold,
                                             inputSystemActions.Player.Cancel,
-                                            inputSystemActions.Player.Drop,
+                                            inputSystemActions.Player.DropLeft,
+                                            inputSystemActions.Player.DropRight,
                                             inputSystemActions.Player.Throw
                                             });
         Blackboard.inputManager = inputManager;
 
-        SetPlayerState(playerState.normal);
+        SetPlayerState(playerState.freeControl);
         Blackboard.playerManager = this;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -44,15 +48,17 @@ public class PlayerManager : MonoBehaviour
     {
         currentState = _state;
 
-        if(currentState == playerState.normal) 
+        switch (currentState)
         {
-            movement.enabled = true;
-            interaction.enabled = true;
-        }
-        else
-        {
-            movement.enabled = false;
-            interaction.enabled = false;
+            case playerState.freeControl:
+                movement.enabled = true;
+                interaction.enabled = true;
+                break;
+                case playerState.noControl: 
+                movement.enabled = false;
+                interaction.enabled = false;
+                break;
+
         }
     }
 

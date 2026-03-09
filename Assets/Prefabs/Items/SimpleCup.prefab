@@ -13,8 +13,7 @@ GameObject:
   - component: {fileID: 3311802431646406089}
   - component: {fileID: 6477393511840310657}
   - component: {fileID: 1340446572059800862}
-  - component: {fileID: 5760913485284914244}
-  - component: {fileID: 168785099604784996}
+  - component: {fileID: 8257858062600726975}
   m_Layer: 0
   m_Name: SimpleCup
   m_TagString: Untagged
@@ -139,7 +138,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.14, y: 0.20689532, z: 0.14}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5760913485284914244
+--- !u!114 &8257858062600726975
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,23 +147,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3960105205351101468}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8ade75df64ad884ca5489f3b190a040, type: 3}
+  m_Script: {fileID: 11500000, guid: 2272dcdbf31292b42adfadabba9542fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canInteract: 1
---- !u!114 &168785099604784996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3960105205351101468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3abb966c3eb012546ba1b791cac2ecd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canInteract: 1
+  weight: 32.5
 --- !u!1 &7009510806433139252
 GameObject:
   m_ObjectHideFlags: 0
