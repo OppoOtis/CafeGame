@@ -18,11 +18,12 @@ public class Interactible : MonoBehaviour, IInteractible
         Visual = transform;
         rb = GetComponent<Rigidbody>();
     }
-
-    public virtual void Interact(Interactor _interactor)
+        
+    public virtual void Interact(Interactor _interactor, bool _left)
     {
-        //I want some things to trigger a minigame, and change the camera view maybe?
+
     }
+
 
     public void DeHighLight()
     {

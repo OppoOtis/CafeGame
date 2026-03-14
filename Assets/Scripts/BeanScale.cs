@@ -11,25 +11,25 @@ public class BeanScale : Interactible
 
     public TextMeshPro weightText;
 
-    public override void Interact(Interactor _interactor)
+    /*public override void interact(interactor _interactor)
     {
-        //Maybe set the camera to a determined place?
+        //maybe set the camera to a determined place?
 
 
-        //if(currentObjectOnScale == null && _interactor.currentlyHolding is IWeighable) 
+        //if(currentobjectonscale == null && _interactor.currentlyholding is iweighable) 
         //{
         //    //place the weighable on the scale
-        //    _interactor.currentlyHolding.Visual.transform.position = onScaleLocation.position;
-        //    _interactor.currentlyHolding.Visual.transform.rotation = Quaternion.identity;
-        //    _interactor.DropCurrentlyHolding();
+        //    _interactor.currentlyholding.visual.transform.position = onscalelocation.position;
+        //    _interactor.currentlyholding.visual.transform.rotation = quaternion.identity;
+        //    _interactor.dropcurrentlyholding();
         //}
 
         ////change interaction based on what the player is holding
-        //if(_interactor.currentlyHolding is CoffeeBag)
+        //if(_interactor.currentlyholding is coffeebag)
         //{
 
         //}
-    }
+    }*/
 
     private void OnCollisionEnter(Collision collision)
     {

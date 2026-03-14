@@ -10,7 +10,7 @@ public class PlayerInteraction : MonoBehaviour, Interactor
     public IGrabbable currentlyHoldingLeft { get; set; }
     public IGrabbable currentlyHoldingRight { get; set; }
 
-    IInteractible closestInteractible;
+    public IInteractible closestInteractible { get; set; }
 
     BoxCollider boxCollider;
     public CharacterController playerCharacterController;
@@ -75,7 +75,7 @@ public class PlayerInteraction : MonoBehaviour, Interactor
 
         foreach (Collider hit in hitColliders)
         {
-            if (hit.GetComponent<Interactible>() && hit.GetComponent<Interactible>().CanInteract && 
+            if (hit.GetComponent<Interactible>() && hit.GetComponent<Interactible>().isActiveAndEnabled && hit.GetComponent<Interactible>().CanInteract && 
                 (closestInteractible == null || 
                 Vector3.Distance(hit.transform.position, boxCollider.transform.position) < Vector3.Distance(closestInteractible.Visual.transform.position, boxCollider.transform.position)) )
                 closestInteractible = hit.GetComponent<IInteractible>();
@@ -96,7 +96,7 @@ public class PlayerInteraction : MonoBehaviour, Interactor
 
     void InteractWith(InputAction.CallbackContext context, bool _left)
     {
-        if (closestInteractible == null)
+        if (closestInteractible == null || (_left && currentlyHoldingLeft != null) || (!_left && currentlyHoldingRight != null))
             return;
         if (closestInteractible.Visual.GetComponent<IGrabbable>() != null)
         {
@@ -104,7 +104,7 @@ public class PlayerInteraction : MonoBehaviour, Interactor
             return;
         }
 
-        closestInteractible.Interact(this);
+        closestInteractible.Interact(this, _left);
     }
 
     void GrabInteractible(InputAction.CallbackContext context, bool _left)
@@ -224,25 +224,25 @@ public class PlayerInteraction : MonoBehaviour, Interactor
     {
         if(currentlyHoldingLeft == null)
             return;
-        currentlyHoldingLeft.GrabInteraction(this);
+        currentlyHoldingLeft.GrabInteraction(this, true);
     }
     void CurrentGrabbableInteractionRight(InputAction.CallbackContext context)
     {
         if(currentlyHoldingRight == null)
             return;
-        currentlyHoldingRight.GrabInteraction(this);
+        currentlyHoldingRight.GrabInteraction(this, false);
     }
     void CurrentGrabbableHoldInteraction()
     {
         if (currentlyHoldingLeft != null && currentlyHoldingLeft.TwoHanded)
         {
             if (Blackboard.inputSystemActions.Player.RightUseHold.ReadValue<float>() > 0 || Blackboard.inputSystemActions.Player.LeftUseHold.ReadValue<float>() > 0)
-                currentlyHoldingLeft.GrabInteractionHold(this);
+                currentlyHoldingLeft.GrabInteractionHold(this, true);
         }
         else if (currentlyHoldingLeft != null && Blackboard.inputSystemActions.Player.LeftUseHold.ReadValue<float>() > 0)
-            currentlyHoldingLeft.GrabInteractionHold(this);
+            currentlyHoldingLeft.GrabInteractionHold(this, true);
         
         else if (currentlyHoldingRight != null && Blackboard.inputSystemActions.Player.RightUseHold.ReadValue<float>() > 0)
-            currentlyHoldingRight.GrabInteractionHold(this);
+            currentlyHoldingRight.GrabInteractionHold(this, false);
     }
 }
