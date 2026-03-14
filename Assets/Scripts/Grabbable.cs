@@ -5,6 +5,16 @@ public class Grabbable : Interactible, IGrabbable
 {
     public bool TwoHanded { get { return twoHanded; } set { twoHanded = value; } }
     public bool twoHanded;
+
+    public virtual void OnPickUp(Interactor _interactor, bool _left)
+    {
+
+    }
+    public virtual void OnDrop(Interactor _interactor, bool _left)
+    {
+
+    }
+
     public virtual void GrabInteraction(Interactor _interactor, bool _left)
     {
         //the interaction to perform when you hold an item 

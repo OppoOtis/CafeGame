@@ -170,6 +170,8 @@ public class PlayerInteraction : MonoBehaviour, Interactor
             _toPickUp.Visual.transform.parent = holdingLocationRight;
         }
 
+        _toPickUp.OnPickUp(this, _left);
+
         _toPickUp.Visual.transform.localPosition = Vector3.zero;
     }
 
@@ -187,6 +189,7 @@ public class PlayerInteraction : MonoBehaviour, Interactor
     {
         if (currentlyHoldingLeft != null && currentlyHoldingLeft.TwoHanded)
         {
+            currentlyHoldingLeft.OnDrop(this, true);
             ActivateGrabbable(currentlyHoldingLeft);
             currentlyHoldingLeft = null;
             currentlyHoldingRight = null;
@@ -197,6 +200,7 @@ public class PlayerInteraction : MonoBehaviour, Interactor
         {
             if (currentlyHoldingLeft == null)
                 return;
+            currentlyHoldingLeft.OnDrop(this, true);
             ActivateGrabbable(currentlyHoldingLeft);
             currentlyHoldingLeft = null;
         }
@@ -204,6 +208,7 @@ public class PlayerInteraction : MonoBehaviour, Interactor
         {
             if (currentlyHoldingRight == null)
                 return;
+            currentlyHoldingRight.OnDrop(this, false);
             ActivateGrabbable(currentlyHoldingRight);
             currentlyHoldingRight = null;
         }

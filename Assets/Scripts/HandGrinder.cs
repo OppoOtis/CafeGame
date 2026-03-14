@@ -14,7 +14,10 @@ public class HandGrinder : Grabbable, IFillable
     public float CurrentVolumeML { get; set; }
     public List<IFilling> currentFillings { get; set; }
 
-
+    public override void OnDrop(Interactor _interactor, bool _left)
+    {
+        EndGrind();
+    }
     public override void GrabInteraction(Interactor _interactor, bool _left)
     {
         if ((_left && _interactor.currentlyHoldingRight != null) || (!_left && _interactor.currentlyHoldingLeft != null))
@@ -39,6 +42,11 @@ public class HandGrinder : Grabbable, IFillable
     }
 
     public override void GrabInteractionRelease(Interactor _interactor, bool _left)
+    {
+        EndGrind();
+    }
+
+    void EndGrind()
     {
         grinding = false;
         twoHanded = false;
