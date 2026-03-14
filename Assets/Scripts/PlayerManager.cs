@@ -1,3 +1,5 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +18,9 @@ public class PlayerManager : MonoBehaviour
 
     InputSystem_Actions inputSystemActions;
     InputManager inputManager;
+
+    public TextMeshProUGUI PromptText;
+    bool textPromptRunning;
 
     private void Awake()
     {
@@ -71,5 +76,19 @@ public class PlayerManager : MonoBehaviour
     private void OnDisable()
     {
         inputManager.WhenDisabled();
+    }
+
+    public IEnumerator ShowTextPrompt(string _text)
+    {
+        if (textPromptRunning)
+            yield return null;
+
+        textPromptRunning = true;
+        PromptText.text = _text;
+
+        yield return new WaitForSeconds(3);
+
+        PromptText.text = "";
+        textPromptRunning = false;
     }
 }

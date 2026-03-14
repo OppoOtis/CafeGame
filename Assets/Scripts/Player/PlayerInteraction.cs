@@ -16,6 +16,7 @@ public class PlayerInteraction : MonoBehaviour, Interactor
     public CharacterController playerCharacterController;
     public Camera playerCamera;
 
+    public float interactionRaycastRange;
     public float throwPower;
 
     private void Awake()
@@ -31,7 +32,9 @@ public class PlayerInteraction : MonoBehaviour, Interactor
         Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.InteractLeft, InteractWithLeft);
         Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.InteractRight, InteractWithRight);
         Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.LeftUse, CurrentGrabbableInteractionLeft);
+        Blackboard.inputManager.AddActionToInputCancelled(Blackboard.inputSystemActions.Player.LeftUse, CurrentGrabbableReleaseInteractionLeft);
         Blackboard.inputManager.AddActionToInput(Blackboard.inputSystemActions.Player.RightUse, CurrentGrabbableInteractionRight);
+        Blackboard.inputManager.AddActionToInputCancelled(Blackboard.inputSystemActions.Player.RightUse, CurrentGrabbableReleaseInteractionRight);
     }
 
     private void Update()
@@ -62,6 +65,11 @@ public class PlayerInteraction : MonoBehaviour, Interactor
             }
         }
 
+        if (currentlyHoldingLeft != null)
+            Debug.Log("Left:" + currentlyHoldingLeft.GetType());
+        if (currentlyHoldingRight != null)
+            Debug.Log("Right" + currentlyHoldingRight.GetType());
+
         CurrentGrabbableHoldInteraction();
     }
 
@@ -71,14 +79,26 @@ public class PlayerInteraction : MonoBehaviour, Interactor
             closestInteractible.DeHighLight();
         
         closestInteractible = null;
-        Collider[] hitColliders = Physics.OverlapBox(boxCollider.transform.position, boxCollider.size, transform.rotation);
 
-        foreach (Collider hit in hitColliders)
+        //check if we hit something with a ray first
+        RaycastHit rayHit;
+        Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out rayHit, interactionRaycastRange);
+        if (rayHit.collider != null && rayHit.collider.GetComponent<Interactible>() != null && rayHit.collider.GetComponent<Interactible>().isActiveAndEnabled && rayHit.collider.GetComponent<Interactible>().canInteract)
         {
-            if (hit.GetComponent<Interactible>() && hit.GetComponent<Interactible>().isActiveAndEnabled && hit.GetComponent<Interactible>().CanInteract && 
-                (closestInteractible == null || 
-                Vector3.Distance(hit.transform.position, boxCollider.transform.position) < Vector3.Distance(closestInteractible.Visual.transform.position, boxCollider.transform.position)) )
-                closestInteractible = hit.GetComponent<IInteractible>();
+            closestInteractible = rayHit.collider.GetComponent<IInteractible>();
+        }
+
+        else
+        {
+            Collider[] hitColliders = Physics.OverlapBox(boxCollider.transform.position, boxCollider.size, transform.rotation);
+
+            foreach (Collider hit in hitColliders)
+            {
+                if (hit.GetComponent<Interactible>() && hit.GetComponent<Interactible>().isActiveAndEnabled && hit.GetComponent<Interactible>().CanInteract &&
+                    (closestInteractible == null ||
+                    Vector3.Distance(hit.transform.position, boxCollider.transform.position) < Vector3.Distance(closestInteractible.Visual.transform.position, boxCollider.transform.position)))
+                    closestInteractible = hit.GetComponent<IInteractible>();
+            }
         }
 
         if (closestInteractible != null)
@@ -234,15 +254,24 @@ public class PlayerInteraction : MonoBehaviour, Interactor
     }
     void CurrentGrabbableHoldInteraction()
     {
-        if (currentlyHoldingLeft != null && currentlyHoldingLeft.TwoHanded)
-        {
-            if (Blackboard.inputSystemActions.Player.RightUseHold.ReadValue<float>() > 0 || Blackboard.inputSystemActions.Player.LeftUseHold.ReadValue<float>() > 0)
-                currentlyHoldingLeft.GrabInteractionHold(this, true);
-        }
-        else if (currentlyHoldingLeft != null && Blackboard.inputSystemActions.Player.LeftUseHold.ReadValue<float>() > 0)
+        if (currentlyHoldingLeft != null && Blackboard.inputSystemActions.Player.LeftUseHold.ReadValue<float>() > 0)
             currentlyHoldingLeft.GrabInteractionHold(this, true);
         
         else if (currentlyHoldingRight != null && Blackboard.inputSystemActions.Player.RightUseHold.ReadValue<float>() > 0)
             currentlyHoldingRight.GrabInteractionHold(this, false);
+    }
+
+    void CurrentGrabbableReleaseInteractionLeft(InputAction.CallbackContext context)
+    {
+        CurrentGrabbableReleaseInteraction(this, true);
+    }
+    void CurrentGrabbableReleaseInteractionRight(InputAction.CallbackContext context)
+    {
+        CurrentGrabbableReleaseInteraction(this, false);
+    }
+
+    void CurrentGrabbableReleaseInteraction(Interactor _interactor, bool _left)
+    {
+        currentlyHoldingRight.GrabInteractionRelease(this, _left);
     }
 }

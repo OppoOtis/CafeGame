@@ -13,4 +13,8 @@ public class Grabbable : Interactible, IGrabbable
     {
         //the interaction to perform when you hold an item 
     }
+    public virtual void GrabInteractionRelease(Interactor _interactor, bool _left)
+    {
+        //the interaction to perform when you hold an item 
+    }
 }

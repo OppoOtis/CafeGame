@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public interface IGrabbable : IInteractible
@@ -6,4 +7,6 @@ public interface IGrabbable : IInteractible
     public Rigidbody rb { get; set; }
     public void GrabInteraction(Interactor _interactor, bool _left);
     public void GrabInteractionHold(Interactor _interactor, bool _left);
+    public void GrabInteractionRelease(Interactor _interactor, bool _left);
+
 }
