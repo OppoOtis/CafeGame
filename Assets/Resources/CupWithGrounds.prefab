@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1340446572059800862}
   - component: {fileID: 8257858062600726975}
   m_Layer: 0
-  m_Name: SimpleCup
+  m_Name: CupWithGrounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
