@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PortafilterTest : Portafilter
-{ 
 
+public class PortafilterTest : Portafilter
+{
 }

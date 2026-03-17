@@ -14,6 +14,11 @@ public interface IFillable
     //I guess whenever you pour a filling to something else, you copy the class if it isn't already inside the IFillable
     List<IFilling> currentFillings { get; set; }
 
-    public void Fill(IFilling _filling, float _ml);
+    //returns the overflow of ml
+    public float Fill(IFilling _filling, float _ml);
+    
+    //returns what comes out of the fillable
     public IFilling Empty(float _ml);
+
+    public void UpdateVisuals(bool _left);
 }

@@ -78,7 +78,16 @@ public class PlayerManager : MonoBehaviour
         inputManager.WhenDisabled();
     }
 
-    public IEnumerator ShowTextPrompt(string _text)
+    Coroutine currentTextPrompt;
+    public void TextPrompt(string _text)
+    {
+        if(currentTextPrompt != null)
+            StopCoroutine(currentTextPrompt);
+
+        currentTextPrompt = StartCoroutine(ShowTextPrompt(_text));
+    }
+
+    IEnumerator ShowTextPrompt(string _text)
     {
         if (textPromptRunning)
             yield return null;

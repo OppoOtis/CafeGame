@@ -65,11 +65,6 @@ public class PlayerInteraction : MonoBehaviour, Interactor
             }
         }
 
-        if (currentlyHoldingLeft != null)
-            Debug.Log("Left:" + currentlyHoldingLeft.GetType());
-        if (currentlyHoldingRight != null)
-            Debug.Log("Right" + currentlyHoldingRight.GetType());
-
         CurrentGrabbableHoldInteraction();
     }
 
@@ -150,6 +145,11 @@ public class PlayerInteraction : MonoBehaviour, Interactor
         _toPickUp.rb.isKinematic = true;
         _toPickUp.rb.linearVelocity = Vector3.zero;
         _toPickUp.Visual.gameObject.layer = 8;
+        for (int i = 0; i < _toPickUp.Visual.childCount; i++)
+        {
+            _toPickUp.Visual.GetChild(i).gameObject.layer = 8;
+        }
+
         _toPickUp.Visual.GetComponent<Collider>().enabled = false; 
         _toPickUp.Visual.transform.forward = transform.forward;
 
@@ -220,6 +220,10 @@ public class PlayerInteraction : MonoBehaviour, Interactor
         _target.CanInteract = true;
         _target.rb.linearVelocity = playerCharacterController.velocity;
         _target.Visual.gameObject.layer = 0;
+        for (int i = 0; i < _target.Visual.childCount; i++)
+        {
+            _target.Visual.GetChild(i).gameObject.layer = 0;
+        }
         _target.Visual.GetComponent<Collider>().enabled = true;
         _target.Visual.transform.parent = null;
     }
@@ -277,6 +281,9 @@ public class PlayerInteraction : MonoBehaviour, Interactor
 
     void CurrentGrabbableReleaseInteraction(Interactor _interactor, bool _left)
     {
-        currentlyHoldingRight.GrabInteractionRelease(this, _left);
+        if (_left)
+            currentlyHoldingLeft.GrabInteractionRelease(this, _left);
+        else
+            currentlyHoldingRight.GrabInteractionRelease(this, _left);
     }
 }
