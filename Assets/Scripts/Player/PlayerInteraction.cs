@@ -281,9 +281,9 @@ public class PlayerInteraction : MonoBehaviour, Interactor
 
     void CurrentGrabbableReleaseInteraction(Interactor _interactor, bool _left)
     {
-        if (_left)
+        if (_left && currentlyHoldingLeft != null)
             currentlyHoldingLeft.GrabInteractionRelease(this, _left);
-        else
+        else if (currentlyHoldingRight != null)
             currentlyHoldingRight.GrabInteractionRelease(this, _left);
     }
 }
