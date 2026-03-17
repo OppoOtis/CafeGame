@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.cyanilux.shadergraph-customlighting": "https://github.com/Cyanilux/URP_ShaderGraphCustomLighting.git#6000.0",
     "com.jimmycushnie.noisynodes": "https://github.com/JimmyCushnie/Noisy-Nodes.git",
     "com.unity.adaptiveperformance": "5.1.6",
     "com.unity.ai.navigation": "2.0.9",
