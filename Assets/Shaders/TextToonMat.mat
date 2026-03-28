@@ -12,7 +12,9 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ALPHAFROMTEXTURE
   - _ENABLESPECULAR
+  - _RECIEVESHADOWS
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -88,7 +90,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _ALPHAFROMTEXTURE: 1
     - _AddPrecomputedVelocity: 0
+    - _Alpha: 1
     - _AlphaClip: 0
     - _AlphaClipThreshold: 0
     - _AlphaToMask: 0
@@ -118,6 +122,7 @@ Material:
     - _PointLightBands: 3
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RECIEVESHADOWS: 1
     - _ReceiveShadows: 1
     - _Smoothness: 0.8
     - _SmoothnessTextureChannel: 0
